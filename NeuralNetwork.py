@@ -7,13 +7,14 @@ class NeuralNetwork(object):
      Main Class to build Neural Network
     """
 
-    def __init__(self, alpha=0.01, epoch=200, criteria='crossEntropy', batchSize=1):
+    def __init__(self, alpha=0.01, epoch=200, criteria='crossEntropy', batchSize=1,verbose = False):
         '''
 
         :param alpha: learning rate(can also be changed during training of network)
         :param epoch: number of passes over data.
         :param criteria: optimization function to be used.
         :param batchSize: the batch size to be used while training.
+        :param verbose: print the details while training(default False)
         '''
         self.layers = -1
         self.layersObject = {}  # stores all the layers of the network.
@@ -21,6 +22,7 @@ class NeuralNetwork(object):
         self.batchSize = batchSize
         self.learningRate = alpha
         self.epoch = epoch
+        self.verbose = verbose
 
     def add(self, inputDim, outputDim, transFunction):
         """
@@ -34,14 +36,12 @@ class NeuralNetwork(object):
         """
         if self.layers != -1:
             oldLayer = self.layersObject[self.layers]
-            assert (
-            oldLayer.outputDim == inputDim), "Input Dimension does not match the output dimension of previous layer"
+            assert (oldLayer.outputDim == inputDim), "Input Dimension does not match the output dimension of previous layer"
 
         self.layers += 1
         self.layersObject[self.layers] = Layers(inputDim, outputDim, transFunction)
 
     def train(self, xtrain, ytrain):
         """
-
         :return:
         """

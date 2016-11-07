@@ -14,5 +14,5 @@ class Layer(object):
         self.inputDim = inputDim
         self.outputDim = outputDim
         self.transformFunction = transformFunction
-        self.weights = np.random.normal(0,1,outputDim*inputDim).reshape(inputDim,outputDim)
+        self.weights = np.random.normal(0,np.sqrt(2/inputDim),outputDim*inputDim).reshape(inputDim,outputDim)
         self.bias = np.zeros((1,outputDim))

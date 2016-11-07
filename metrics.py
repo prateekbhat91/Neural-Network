@@ -22,7 +22,6 @@ def accuracy_score(true, pred):
 
 def confusion_matrix(true, pred):
     '''
-
     :param true: numpy array containing all the true classes.
     :param pred: numpy array containing all the predicted classes.
     :return    : confusion matrix
@@ -73,8 +72,6 @@ def mean_squared_error(true, pred):
     pred = utils.convert_to_1D(pred)
     assert (true.shape == pred.shape), "true and pred dimensions do not match."
     return np.sum(np.square(np.subtract(true, pred))) / true.shape[0]
-
-
 
 
 def r2_score(true, pred):

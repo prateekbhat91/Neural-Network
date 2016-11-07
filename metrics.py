@@ -15,8 +15,7 @@ def accuracy_score(true, pred):
     '''
     true = utils.convert_to_1D(true)
     pred = utils.convert_to_1D(pred)
-    if true.shape != pred.shape:
-        raise ValueError("true and pred dimensions do not match.")
+    assert (true.shape == pred.shape), "true and pred dimensions do not match."
     return np.count_nonzero(np.subtract(true, pred)) / true.shape[0]
 
 
@@ -31,9 +30,7 @@ def confusion_matrix(true, pred):
     true = utils.convert_to_1D(true)
     pred = utils.convert_to_1D(pred)
 
-    if true.shape != pred.shape:
-        raise ValueError("true and pred dimensions do not match.")
-    # get the number of classes
+    assert (true.shape == pred.shape), "true and pred dimensions do not match."
     numclass = len(np.unique(true))
 
     # encode the classes with integers ranging from 0 to numclass-1.
@@ -60,8 +57,7 @@ def mean_absolute_error(true, pred):
     '''
     true = utils.convert_to_1D(true)
     pred = utils.convert_to_1D(pred)
-    if true.shape != pred.shape:
-        raise ValueError("true and pred dimensions do not match.")
+    assert (true.shape == pred.shape), "true and pred dimensions do not match."
     return np.sum(np.fabs(np.subtract(true, pred))) / true.shape[0]
 
 
@@ -75,8 +71,7 @@ def mean_squared_error(true, pred):
     '''
     true = utils.convert_to_1D(true)
     pred = utils.convert_to_1D(pred)
-    if true.shape != pred.shape:
-        raise ValueError("true and pred dimensions do not match.")
+    assert (true.shape == pred.shape), "true and pred dimensions do not match."
     return np.sum(np.square(np.subtract(true, pred))) / true.shape[0]
 
 
@@ -90,9 +85,7 @@ def r2_score(true, pred):
    '''
     true = utils.convert_to_1D(true)
     pred = utils.convert_to_1D(pred)
-    if true.shape != pred.shape:
-        raise ValueError("true and pred dimensions do not match.")
+    assert (true.shape == pred.shape), "true and pred dimensions do not match."
     numerator = np.sum(np.square(np.subtract(true, pred)))
     denominator = np.sum(np.square(np.subtract(true, np.mean(true))))
     return 1 - (numerator / denominator)
-

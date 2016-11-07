@@ -27,20 +27,22 @@ class label_encoder():
         :param array: 1D input numpy array.
         :return: None
         '''
-        if array.ndim == 1:
-            self._classes, self._transformation = np.unique(array, return_inverse=True)
-        else:
+        if array.ndim != 1:
             raise ValueError("1D array required")
+
+        self._classes, self._transformation = np.unique(array, return_inverse=True)
+
 
     def transform(self,array):
         '''
         :param array: 1D numpy array to be transformed
         :return: label encoded array.
         '''
-        if array.ndim == 1:
-            return np.searchsorted(self._classes, array)
-        else:
+        if array.ndim != 1:
             raise ValueError("1D array required")
+        return np.searchsorted(self._classes, array)
+
+
 
 
     def inverse_transform(self,array):
@@ -48,7 +50,7 @@ class label_encoder():
         :param array: 1D numpy array to be transformed.
         :return: label decoded array.
         '''
-        if array.ndim == 1:
-            return self._classes[array]
-        else:
+        if array.ndim != 1:
             raise ValueError("1D array required")
+        return self._classes[array]
+

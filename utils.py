@@ -1,15 +1,24 @@
+'''
+This file includes util functions required while building neural network.
+'''
+
 import numpy as np
 
 
 def convert_to_1D(tensor):
+    '''
+    Converts a numpy array into an array of 1 dimension.
+    :param tensor: input numpy array
+    :return: 1D array
+    '''
     return np.ravel(tensor)
 
 class label_encoder():
     '''
     Encodes the elements of an array from range 0 to num classes -1.
+    This function is very similar to scikit-learn LabelEncoder.
     '''
     def __init__(self):
-
         self._classes = None
         self.transformation = None
 
@@ -26,30 +35,20 @@ class label_encoder():
     def transform(self,array):
         '''
         :param array: 1D numpy array to be transformed
-        :return: lebel encoded array.
+        :return: label encoded array.
         '''
-        return np.searchsorted(self._classes, array)
+        if array.ndim == 1:
+            return np.searchsorted(self._classes, array)
+        else:
+            raise ValueError("1D array required")
 
 
     def inverse_transform(self,array):
         '''
         :param array: 1D numpy array to be transformed.
-        :return: lable decoded array.
+        :return: label decoded array.
         '''
         if array.ndim == 1:
             return self._classes[array]
         else:
             raise ValueError("1D array required")
-
-
-# if __name__ == '__main__':
-#
-#     b = [1,2,4,1,2,5,8,4,5,2,3,4,2]
-#     b= np.array(b)
-#     le =label_encoder()
-#     le.fit(b)
-#     b = le.transform(b)
-#     # print (b)
-#     b = le.inverse_transform(b)
-#     print(b)
-

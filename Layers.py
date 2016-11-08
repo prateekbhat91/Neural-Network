@@ -5,6 +5,9 @@ class Layer(object):
     '''
     Create Layer object for Neural Network and store all the informations related to it.
     '''
+
+
+
     def __init__(self,inputDim,outputDim,transformFunction=None):
         '''
         :param inputDim: Input Dimension for this Layer

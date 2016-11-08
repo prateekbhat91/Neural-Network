@@ -16,7 +16,7 @@ def accuracy_score(true, pred):
     true = utils.convert_to_1D(true)
     pred = utils.convert_to_1D(pred)
     assert (true.shape == pred.shape), "true and pred dimensions do not match."
-    return np.count_nonzero(np.subtract(true, pred)) / true.shape[0]
+    return (true.shape[0] - np.count_nonzero(np.subtract(true, pred)) )/ true.shape[0]
 
 
 

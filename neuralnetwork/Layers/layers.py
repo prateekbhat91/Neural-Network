@@ -67,3 +67,10 @@ class LeakyReLU_Layer(BaseLayer):
         :return: derivate of Leaky ReLU with leakage of 0.01.
         '''
         return np.clip(x > 0, 0.01, 1.0)
+
+
+# s = Sigmoid_Layer(10,2)
+# r = ReLU_Layer(10,2)
+#
+# print(s.weights)
+# print (r.weights)

@@ -47,7 +47,7 @@ class NeuralNetwork(object):
         self.momentum = momentum
         self.decay = decay
         self.random_seed = random_seed
-        self.optimizer = optimizers[optimizer]
+        self.optimizer = optimizers[optimizer](learning_rate=self.learningRate,decay=self.decay,momentum=self.momentum)
 
 
     'Iterate over the layers in neural network'
@@ -84,13 +84,18 @@ class NeuralNetwork(object):
         :return:
         """
         checkXandY(x,y)
-        opt = self.optimizer(learning_rate=self.learningRate,decay=self.decay,momentum=self.momentum)
-        opt.backprop(nn,x,y)
+        self.optimizer.backprop(nn,x,y)
 
 
 
-    def predict(self,x):
-        pass
+    def predict(self,x, nn):
+        pred = []
+        yhat = self.optimizer._forwardprop(nn,x, trace=False)
+        for i in range(x.shape[0]):
+            pred.append(yhat[i].argmax())
+        return np.array(pred)
+
+
 
 
 

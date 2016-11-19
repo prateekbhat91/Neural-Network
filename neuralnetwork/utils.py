@@ -34,8 +34,6 @@ def change_labels(ytrain):
 
     ytrain = ytrain.ravel()
     numclass = len(np.unique(ytrain))
-
-    # changed_ytrain = np.array([])
     changed_ytrain = []
     for label in ytrain:
         temp = np.zeros(numclass)

@@ -1,9 +1,9 @@
+from __future__ import division
+import numpy as np
+
 '''
 This file contains implementation of various activation functions.
 '''
-
-#Import libraries
-import numpy as np
 
 #Random seed for consistency in results.
 np.random.seed(32)

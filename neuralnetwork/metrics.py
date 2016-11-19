@@ -1,10 +1,13 @@
+from __future__ import division, absolute_import
+import neuralnetwork.utils as utils
+from neuralnetwork.preprocessing import label_encoder
+import numpy as np
+
 '''
 This file contains implementation of common metric functions for
 classification and regression.
 '''
-from __future__ import division, absolute_import
-import utils
-import numpy as np
+
 
 'Classification'
 def accuracy_score(true, pred):
@@ -33,7 +36,7 @@ def confusion_matrix(true, pred):
     numclass = len(np.unique(true))
 
     # encode the classes with integers ranging from 0 to numclass-1.
-    labelEncoder = utils.label_encoder()
+    labelEncoder = label_encoder()
     labelEncoder.fit(true)
     true = labelEncoder.transform(true)
     pred = labelEncoder.transform(pred)

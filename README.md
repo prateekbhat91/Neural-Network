@@ -3,6 +3,23 @@ This repository is an ongoing work of implementing neural network in Python.
 
 We have tried to keep the function and variable names similar to [scikit-learn](http://scikit-learn.org/stable/) and [keras](https://keras.io/). This repository will be updated regularly so stay tuned.
 
+
+## Optimizers available:
+1. **Stochastic Gradient Descent**: use optimizer='SGD'.
+    1. **Vanilla Backpropogation**: set momentum to 0 while creating neural network object.
+    2. **Classical momentum**: set a value of momentum while creating neural network object.
+2. **Nesterov Momentum**: use optimizer='Nesterov' and set a value of momentum while creating neural network object.
+3. **RMSProp**: use optimizer='RMSProp' and set a value of decay while creating neural network object.
+4. **Adagrad**: use optimizer='Adagrad'.
+5. **Adam**:  use optimizer='Adam'.
+
+## Layers available:
+1. **Sigmoid**
+2. **Tanh**
+3. **ReLU**
+4. **LeakyReLU**
+
+
 # Usage:
 Divide your data into scikit-learn format of numpy arrays, i.e. have Xtrain, ytrain ,Xtest and ytest where,
 

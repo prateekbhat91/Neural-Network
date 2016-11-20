@@ -78,19 +78,36 @@ class NeuralNetwork(object):
         self._layernum += 1
         self._layersObject[self._layernum] = layer_object
 
-    # @classmethod
-    def train(self,nn,x, y):
-        """
-        :return:
-        """
+
+    def train(self,x, y):
+        '''
+        Function to train the neural network.
+        :param x: training examples
+        :param y: training labels
+        :return: None
+        '''
         checkXandY(x,y)
-        self.optimizer.backprop(nn,x,y)
+        self.optimizer.backprop(x,y,self)
 
 
 
-    def predict(self,x, nn):
+    def predict(self,x):
+        '''
+        Function to predict the targel label
+        :param x: test examples
+        :return: predicted values
+        '''
+
         pred = []
-        yhat = self.optimizer._forwardprop(nn,x, trace=False)
+        yhat = self.optimizer._forwardprop(self,x,trace=False)
+
+        'check for regression or classification'
+        if self._layersObject[self._layernum].output_dim == 1:
+            'if the last layer output dimension is 1,' \
+            'it is regression otherwise classification'
+            return yhat
+
+        'This is for classification'
         for i in range(x.shape[0]):
             pred.append(yhat[i].argmax())
         return np.array(pred)

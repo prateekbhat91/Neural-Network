@@ -6,7 +6,14 @@ from neuralnetwork.metrics import accuracy_score
 from neuralnetwork.utils import change_labels
 import copy
 
+'This file contains implementation of base class for optimizers.'
+
+
+
 class BaseOptimizer():
+    '''
+    This is a base class and should not be instantiated.
+    '''
 
     __metaclass__ = ABCMeta
 
@@ -14,14 +21,14 @@ class BaseOptimizer():
         self.learning_rate = learning_rate
         self.decay = decay
         self.momentum = momentum
+        self._gradients = {}
 
     def _forwardprop(self,nn,x,trace=True):
         '''
         Forward propogation method for neural network.
         :param nn: neural network
         :param x: input data
-        :param trace: If trace is true, function return the input of each layer and output of the last layer.
-        If trace is False, the function just returns the output of last layer.
+        :param trace: (Binary)Default if True
         :return: If trace is true, function return the input of each layer and output of the last layer.
         If trace is False, the function just returns the output of last layer.
 
@@ -60,6 +67,12 @@ class BaseOptimizer():
         :param y: training labels
         :return: None
         """
+        'make a dictironary to store the gradients for each layer/ to be used for momentum'
+        for i in range(len(nn._layersObject)):
+            self._gradients[i] = 0
+
+        self.set_smooth_gradients(nn)
+
         y_real = copy.copy(y)
 
         if nn._layersObject[nn._layernum].output_dim != 1:
@@ -94,17 +107,13 @@ class BaseOptimizer():
 
 
                     nn._layersObject[i].weights = self.update_weights(delta, layer_input=each_layer_output[i][0],
-                                                    curr_weights=nn._layersObject[i].weights, Lambda=nn.Lambda)
+                                                    layer_index=i,curr_weights=nn._layersObject[i].weights, Lambda=nn.Lambda)
 
                     nn._layersObject[i].bias = self.update_bias(delta, curr_bias=nn._layersObject[i].bias)
 
 
             if nn.verbose == True:
                 pred = nn.predict(x)
-                # print ('pred shape'), pred.shape
-                # print ('y shape'), y_real.shape
-                #
-                # raw_input()
                 print('epoch:{0}, learning rate:{1}, {2}:{3}'.format(run,self.learning_rate,nn.metric.__name__,
                                                                       nn.metric(y_real,pred)))
 
@@ -113,20 +122,56 @@ class BaseOptimizer():
 
 
     @abstractmethod
-    def update_weights(self,delta, layer_input, curr_weights, Lambda):
-        pass
-    @abstractmethod
-    def update_bias(self, delta, curr_bias):
+    def update_weights(self,delta, layer_input, layer_index,curr_weights, Lambda):
+        '''
+        This is an abstract function and should be defined for each derived class.
+        :param delta:
+        :param layer_input: input of each layer
+        :param layer_index: index of layer to be updated.
+        :param curr_weights: current weights of layer
+        :param Lambda: regularization parameter.
+        :return: updated weights
+        '''
         pass
 
+
+
+    def update_bias(self, delta, curr_bias):
+        '''
+        This is an abstract function and should be defined for each derived class.
+        :param delta:
+        :param curr_bias: current bias of layer.
+        :return: updated bias.
+        '''
+        gradient = self.learning_rate * np.sum(delta, axis=0, keepdims=True)
+
+        new_bias = curr_bias - self.learning_rate * gradient
+        return new_bias
+
     def calculate_delta(self, derivative, loss):
+        '''
+        This function calculates the value of delta.
+        :param derivative: derivate of the layer.
+        :param loss: loss of each layer.
+        :return: delta
+        '''
         return np.multiply(derivative, loss)
 
 
     def decay_learning_rate(self, run):
-        self.learning_rate *= 1 / (1 + self.decay * run)
+        '''
+        This function decays the learning rate depending
+        on the number of runs and decay rate.
+        :param run:
+        :return:
+        '''
+        pass
 
 
-
-
-
+    def set_smooth_gradients(self, nn):
+        '''
+        Only to be used for ADAM. It initializes the smooth gradients for each layer to 0.
+        :param nn: neural network
+        :return: None
+        '''
+        pass

@@ -6,9 +6,9 @@ from collections import defaultdict
 from neuralnetwork.Optimizers.optimizers import *
 from neuralnetwork.metrics import *
 
-optimizers = {'SGD':SGD}
-Criteria = {'SSE':SSE, 'cross_entropy':cross_entropy}
-metrics = {'MSE':mean_squared_error, 'AS':accuracy_score}
+_optimizers = {'SGD':SGD, 'Nesterov':Nesterov, 'Adagrad':Adagrad, 'Adam':Adam, 'RMSProp':RMSProp}
+_Criteria = {'SSE':SSE, 'cross_entropy':cross_entropy}
+_metrics = {'MSE':mean_squared_error, 'AS':accuracy_score}
 
 class NeuralNetwork(object):
     """
@@ -35,12 +35,12 @@ class NeuralNetwork(object):
         assert (verbose == True or verbose == False), "{0} not supported. Verbose supports True and False".format(
             verbose)
         assert (momentum >= 0 and momentum <= 1), 'momentum should be between [0,1]'
-        assert (optimizer in optimizers), '{0} not supported'.format(optimizer)
-        assert (metric in metrics), '{0} not supported '.format(metric)
+        assert (optimizer in _optimizers), '{0} not supported'.format(optimizer)
+        assert (metric in _metrics), '{0} not supported '.format(metric)
 
         self._layernum = -1
         self._layersObject = defaultdict()  # stores all the layers of the network.
-        self.criteria = Criteria[criteria]
+        self.criteria = _Criteria[criteria]
         self.batch_size = batch_size
         self.learningRate = alpha
         self.epoch = epoch
@@ -50,8 +50,8 @@ class NeuralNetwork(object):
         self.momentum = momentum
         self.decay = decay
         self.random_seed = random_seed
-        self.optimizer = optimizers[optimizer](learning_rate=self.learningRate,decay=self.decay,momentum=self.momentum)
-        self.metric = metrics[metric]
+        self.optimizer = _optimizers[optimizer](learning_rate=self.learningRate,decay=self.decay,momentum=self.momentum)
+        self.metric = _metrics[metric]
 
 
     'Iterate over the layers in neural network'
@@ -59,10 +59,20 @@ class NeuralNetwork(object):
         return [i for i in self._layersObject]
 
     def __str__(self):
-        return '====Neural network summary====\n' \
-               'Layers:\t{0}\n' \
-               'Criteria:\t{1}\n' \
-               '==============================' .format(len(self._layersObject),self.criteria)
+        '''
+        Overrides print function of python.
+        :return: network details.
+        '''
+
+        return '****Neural network summary****' + '\n' \
+               '{:>10s}{:>10d}\n'.format('Layers', len(self._layersObject)) + \
+               '{:>12s}{:>18s}\n'.format('Criteria', self.criteria.__name__) + \
+               '{:>13s}{:>8s}\n'.format('Optimizer', self.optimizer.__class__.__name__)+ \
+               '{:>9s}{:>12d}\n'.format('Epoch', self.epoch) + \
+               '{:>12s}{:>10f}\n'.format('Learning rate', self.learningRate, ) + \
+               '{:>9s}{:>14f}\n'.format('Decay', self.decay) + \
+               '{:>12s}{:>10.2f}\n'.format('Momentum', self.momentum)
+
 
     def add(self, layer_object ):
         """
@@ -77,7 +87,7 @@ class NeuralNetwork(object):
             assert (oldLayer.output_dim == layer_object.input_dim), \
                 "Input dimension of current layer does not match the output dimension of previous layer," \
                 "Input dimension of current layer = {0}, Output dimension of previous layer = {1}."\
-                .format(layer_object.inputDim,oldLayer.output_dim)
+                .format(layer_object.input_dim,oldLayer.output_dim)
 
         self._layernum += 1
         self._layersObject[self._layernum] = layer_object
@@ -115,9 +125,3 @@ class NeuralNetwork(object):
         for i in range(x.shape[0]):
             pred.append(yhat[i].argmax())
         return np.array(pred)
-
-
-
-
-
-

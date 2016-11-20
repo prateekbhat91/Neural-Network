@@ -33,10 +33,10 @@ nn.add(Sigmoid_Layer(output_dim1,output_dim2))      #Hidden layer
 nn.add(Sigmoid_Layer(output_dim2,numClasses))      #Hidden layer
 
 'Train the neural network of '
-nn.train(nn,Xtrain,ytrain)
+nn.train(Xtrain,ytrain)
 
 'predict using the trained neural network'
-pred = nn.predict(nn,Xtest)
+pred = nn.predict(Xtest)
 
 accuracy = accuracy_score(ytest, pred)
 ```

@@ -3,6 +3,8 @@ from abc import abstractmethod, ABCMeta
 import numpy as np
 from neuralnetwork.utils import generate_batches
 from neuralnetwork.metrics import accuracy_score
+from neuralnetwork.utils import change_labels
+import copy
 
 class BaseOptimizer():
 
@@ -24,7 +26,7 @@ class BaseOptimizer():
         If trace is False, the function just returns the output of last layer.
 
         'Example: If we have one input and two hidden layer, the output of forwardprop with trace = True is' \
-        '[ (input),(input),(input,output)]'
+        '[ (input, None),(input,None),(input,output)]'
         '''
         if trace == True:
             outputs = []
@@ -50,7 +52,7 @@ class BaseOptimizer():
         return Output
 
 
-    def backprop(self, nn, x, y):
+    def backprop(self, x, y,nn):
         """
         Backpropogation algorithm
         :param nn: neural network object
@@ -58,6 +60,10 @@ class BaseOptimizer():
         :param y: training labels
         :return: None
         """
+        y_real = copy.copy(y)
+
+        if nn._layersObject[nn._layernum].output_dim != 1:
+            y = change_labels(y)
 
 
         run = 0
@@ -93,20 +99,23 @@ class BaseOptimizer():
                     nn._layersObject[i].bias = self.update_bias(delta, curr_bias=nn._layersObject[i].bias)
 
 
+            if nn.verbose == True:
+                pred = nn.predict(x)
+                # print ('pred shape'), pred.shape
+                # print ('y shape'), y_real.shape
+                #
+                # raw_input()
+                print('epoch:{0}, learning rate:{1}, {2}:{3}'.format(run,self.learning_rate,nn.metric.__name__,
+                                                                      nn.metric(y_real,pred)))
 
-            # pred = self._forwardprop(nn,x,trace=False)
-            # print ('pred shape'), pred.shape
-            # print('epoch:{0}, learning rate:{1}, loss:{2}'.format(run,self.learning_rate,
-            #                                                       accuracy_score(y,pred)))
-            # raw_input()
             run += 1
 
 
 
-
+    @abstractmethod
     def update_weights(self,delta, layer_input, curr_weights, Lambda):
         pass
-
+    @abstractmethod
     def update_bias(self, delta, curr_bias):
         pass
 

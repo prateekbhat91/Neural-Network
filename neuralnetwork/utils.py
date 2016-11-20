@@ -57,7 +57,3 @@ def generate_batches(data_size,batch_size):
 
     for i in range(0, data_size, batch_size):
         yield ind[i:i + batch_size]
-
-
-# def reg_or_class(y):
-#

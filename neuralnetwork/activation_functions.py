@@ -49,7 +49,6 @@ def Leaky_ReLU(tensor):
     :param tensor: numpy array
     :return: numpy array of same shape.
     '''
-    tensor = tensor.astype(float)
     tensor[tensor<0] *= 0.01
     return tensor
 

@@ -8,14 +8,14 @@ from neuralnetwork.metrics import *
 
 _optimizers = {'SGD':SGD, 'Nesterov':Nesterov, 'Adagrad':Adagrad, 'Adam':Adam, 'RMSProp':RMSProp}
 _Criteria = {'SSE':SSE, 'cross_entropy':cross_entropy}
-_metrics = {'MSE':mean_squared_error, 'AS':accuracy_score}
+# _metrics = {'MSE':mean_squared_error, 'AS':accuracy_score}
 
 class NeuralNetwork(object):
     """
     Main Class to build Neural Network
     """
 
-    def __init__(self, tol=0.0001, alpha=0.01, epoch=200, criteria=cross_entropy, optimizer='SGD',metric='MSE',
+    def __init__(self, tol=0.0001, alpha=0.01, epoch=200, criteria=cross_entropy, optimizer='SGD',
                  batch_size=1, verbose=False,Lambda=0.005, decay=0.0, momentum=0.0, random_seed=None):
         '''
         :param tol: tolerance of change in error.
@@ -36,7 +36,7 @@ class NeuralNetwork(object):
             verbose)
         assert (momentum >= 0 and momentum <= 1), 'momentum should be between [0,1]'
         assert (optimizer in _optimizers), '{0} not supported'.format(optimizer)
-        assert (metric in _metrics), '{0} not supported '.format(metric)
+        # assert (metric in _metrics), '{0} not supported '.format(metric)
 
         self._layernum = -1
         self._layersObject = defaultdict()  # stores all the layers of the network.
@@ -51,7 +51,7 @@ class NeuralNetwork(object):
         self.decay = decay
         self.random_seed = random_seed
         self.optimizer = _optimizers[optimizer](learning_rate=self.learningRate,decay=self.decay,momentum=self.momentum)
-        self.metric = _metrics[metric]
+        # self.metric = _metrics[metric]
 
 
     'Iterate over the layers in neural network'

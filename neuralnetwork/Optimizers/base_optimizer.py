@@ -100,6 +100,7 @@ class BaseOptimizer():
                         delta = self.calculate_delta(nn._layersObject[i].derivative(each_layer_output[i][1])
                                                       , nn.criteria(ytrain, each_layer_output[i][1]))
 
+
                     else:
                         delta = self.calculate_delta(nn._layersObject[i].derivative(each_layer_output[i+1][0])
                                                       , np.dot(delta, nn._layersObject[i+1].weights.T))
@@ -113,9 +114,13 @@ class BaseOptimizer():
 
 
             if nn.verbose == True:
-                pred = nn.predict(x)
-                print('epoch:{0}, learning rate:{1}, {2}:{3}'.format(run,self.learning_rate,nn.metric.__name__,
-                                                                      nn.metric(y_real,pred)))
+
+                pred = self._forwardprop(nn,x, trace=False)
+                'calculate the training loss(SSE)'
+                loss = np.sum(np.power(np.subtract(pred,y),2))/pred.shape[0]
+
+                print('epoch:{0}/{1}, learning rate:{2}, loss:{3}'.format(run,nn.epoch,self.learning_rate,
+                                                                     loss))
 
             run += 1
 

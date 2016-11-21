@@ -48,7 +48,7 @@ class ReLU_Layer(BaseLayer):
         :param x:
         :return: derivate of tanh function
         '''
-        return (x > 0)
+        return np.clip(x > 0, 0.0, 1.0)
 
 
 class LeakyReLU_Layer(BaseLayer):
@@ -67,10 +67,3 @@ class LeakyReLU_Layer(BaseLayer):
         :return: derivate of Leaky ReLU with leakage of 0.01.
         '''
         return np.clip(x > 0, 0.01, 1.0)
-
-
-# s = Sigmoid_Layer(10,2)
-# r = ReLU_Layer(10,2)
-#
-# print(s.weights)
-# print (r.weights)

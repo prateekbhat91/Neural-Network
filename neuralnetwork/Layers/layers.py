@@ -67,3 +67,21 @@ class LeakyReLU_Layer(BaseLayer):
         :return: derivate of Leaky ReLU with leakage of 0.01.
         '''
         return np.clip(x > 0, 0.01, 1.0)
+
+class Softmax_Layer(BaseLayer):
+
+    def __init__(self,input_dim,output_dim):
+        '''
+        :param input_dim: input dimension of layer
+        :param output_dim: output dimension of layer
+        '''
+        BaseLayer.__init__(self, input_dim, output_dim, activation_function=softmax)
+
+
+    def derivative(self, x):
+        '''
+        :param x: Leaky ReLU activated input.
+        :return: derivate of Leaky ReLU with leakage of 0.01.
+        '''
+        'to be implemented'
+        pass

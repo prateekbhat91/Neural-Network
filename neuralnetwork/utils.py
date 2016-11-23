@@ -1,7 +1,7 @@
 '''
 This file includes util functions required while building neural network.
 '''
-
+import sys
 import numpy as np
 np.random.seed(1024)
 
@@ -54,6 +54,32 @@ def generate_batches(data_size,batch_size):
     assert (batch_size > 0), 'batch_size should be greater than zero.'
     ind = np.array([i for i in range(data_size)])
     np.random.shuffle(ind)
-
+    temp = []
     for i in range(0, data_size, batch_size):
-        yield ind[i:i + batch_size]
+        temp.append( ind[i:i + batch_size])
+    return np.array(temp)
+
+
+
+def progress_bar(curr_ite, total, total_epoch, curr_epoch,prefix = '', decimals = 0, barLength = 50):
+    '''
+    Prints the progress of a for loop.
+    I have used the modified version of Greenstick code on stackoverflow.
+    Link to the code: http://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console?answertab=votes#tab-top
+    :param curr_ite: current iteration
+    :param total: total iterations
+    :param total_epoch: total epochs to be conducted
+    :param curr_epoch: current epoch
+    :param prefix: not required(default Progress)
+    :param decimals: positive number of decimals in percent complete (Int)
+    :param barLength: length of the bar
+    :return: None
+    '''
+    formatStr = "{0:." + str(decimals) + "f}"
+    percent = formatStr.format(100 * (curr_ite / float(total)))
+    filledLength = int(round(barLength * curr_ite / float(total)))
+    bar = '>' * filledLength + '-' * (barLength - filledLength)
+    sys.stdout.write('\repoch %s/%s %s %s %s%s' % (curr_epoch,total_epoch,prefix, bar, percent, '%')),
+    if curr_ite == total:
+        sys.stdout.write('\n')
+    sys.stdout.flush()

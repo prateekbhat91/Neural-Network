@@ -1,7 +1,7 @@
 from __future__ import division
 from abc import abstractmethod, ABCMeta
 import numpy as np
-from neuralnetwork.utils import generate_batches
+from neuralnetwork.utils import generate_batches, progress_bar
 from neuralnetwork.metrics import accuracy_score
 from neuralnetwork.utils import change_labels
 import copy
@@ -87,7 +87,11 @@ class BaseOptimizer():
             self.decay_learning_rate(run)
 
             'generate batches of data depending on the batch size.'
-            for indices in generate_batches(x.shape[0], batch_size=nn.batch_size):
+            batches = generate_batches(x.shape[0], batch_size=nn.batch_size)
+            num_batches = len(batches)
+            curr_batch = 0
+            for indices in batches:
+
 
                 np.random.shuffle(indices)
                 xtrain = x[indices]
@@ -116,6 +120,9 @@ class BaseOptimizer():
 
                     nn._layersObject[i].bias = self.update_bias(delta, curr_bias=nn._layersObject[i].bias)
 
+                if nn.verbose == True:
+                    curr_batch += 1
+                    progress_bar(curr_batch, num_batches, prefix='Progress:', barLength=30,total_epoch=nn.epoch, curr_epoch=run+1)
 
             if nn.verbose == True:
 
@@ -123,9 +130,7 @@ class BaseOptimizer():
                 'calculate the training loss(SSE)'
                 loss = np.sum(np.power(np.subtract(pred,y),2))/pred.shape[0]
 
-                print('epoch:{0}/{1}, learning rate:{2}, loss:{3}'.format(run+1,nn.epoch,self.learning_rate,
-                                                                     loss))
-
+                print('learning rate:{0}, loss:{1}'.format(self.learning_rate,loss))
             run += 1
 
 

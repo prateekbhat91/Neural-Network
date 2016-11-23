@@ -19,7 +19,6 @@ We have tried to keep the function and variable names similar to [scikit-learn](
 3. **ReLU**
 4. **LeakyReLU**
 
-
 # Usage:
 Divide your data into scikit-learn format of numpy arrays, i.e. have Xtrain, ytrain ,Xtest and ytest where,
 
@@ -56,3 +55,14 @@ accuracy = accuracy_score(ytest, pred)
 ```
 ## Note:
 For regression the output dimension of the last layer should be 1.
+
+# Support:
+If you are having issues, please let us know.
+We have a mailing list located at: Neural--Network@google-groups.com
+
+# Contribute:
+Please feel free to get in touch for contributions. We have a huge list of things to be implemented
+like support for numba and PyCUDA.
+
+# License:
+The project is licensed under the MIT license.

@@ -112,16 +112,23 @@ class NeuralNetwork(object):
         :return: predicted values
         '''
 
-        pred = []
-        yhat = self.optimizer._forwardprop(self,x,trace=False)
-
         'check for regression or classification'
         if self._layersObject[self._layernum].output_dim == 1:
             'if the last layer output dimension is 1,' \
             'it is regression otherwise classification'
-            return yhat
+            return self.optimizer._forwardprop(self, x, trace=False)
 
         'This is for classification'
+        yhat = self.predict_proba(x)
+        pred = []
         for i in range(x.shape[0]):
             pred.append(yhat[i].argmax())
         return np.array(pred)
+
+
+    def predict_proba(self,x):
+        from neuralnetwork.activation_functions import softmax
+        return  softmax(self.optimizer._forwardprop(self, x, trace=False))
+
+
+

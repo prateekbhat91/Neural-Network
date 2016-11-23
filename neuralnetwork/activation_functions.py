@@ -55,14 +55,12 @@ def Leaky_ReLU(tensor):
 
 def softmax(tensor):
     '''
-    Softmax function(normalized exponential): changes 1D array of arbitrary real
-    values into 1D array of real values in the range (0,1) that add upto 1.
+    Softmax function(normalized exponential): changes array of arbitrary real
+    values into array of real values in the range (0,1) that add upto 1.
+    Softmax usually fails for large numbers so we will shift the numbers and then calculate.
     :param tensor: 1D numpy array.
     :return: softmax transferred numpy array of same dimension.
     '''
-    'check the dimension of tensor'
-    if tensor.ndim == 1:
-        exp = np.exp(tensor)
-        return exp / np.sum(exp)
-    else:
-        raise ValueError('Input tensor is not a 1D array')
+    tensor = tensor -np.max(tensor, axis=1,keepdims=True)
+    exp = np.exp(tensor)
+    return exp/np.sum(exp, axis=1,keepdims=True)

@@ -67,6 +67,8 @@ class BaseOptimizer():
         :param y: training labels
         :return: None
         """
+        np.random.seed(nn.random_seed)
+
         'make a dictironary to store the gradients for each layer/ to be used for momentum'
         for i in range(len(nn._layersObject)):
             self._gradients[i] = 0
@@ -86,6 +88,8 @@ class BaseOptimizer():
 
             'generate batches of data depending on the batch size.'
             for indices in generate_batches(x.shape[0], batch_size=nn.batch_size):
+
+                np.random.shuffle(indices)
                 xtrain = x[indices]
                 ytrain = y[indices]
 
@@ -119,7 +123,7 @@ class BaseOptimizer():
                 'calculate the training loss(SSE)'
                 loss = np.sum(np.power(np.subtract(pred,y),2))/pred.shape[0]
 
-                print('epoch:{0}/{1}, learning rate:{2}, loss:{3}'.format(run,nn.epoch,self.learning_rate,
+                print('epoch:{0}/{1}, learning rate:{2}, loss:{3}'.format(run+1,nn.epoch,self.learning_rate,
                                                                      loss))
 
             run += 1

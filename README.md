@@ -65,4 +65,4 @@ Please feel free to get in touch for contributions. We have a huge list of thing
 like support for numba and PyCUDA.
 
 # License:
-The project is licensed under the MIT license.
+The project is licensed under BSD-3-Clause.
